@@ -1,7 +1,8 @@
-import { prisma } from '../database/prismaClient.js';
+import { prisma } from '../config/database.js';
+import jwt from 'jsonwebtoken';
 
 export class ClienteController {
-  static async enviaCodigoVerificado(req, res, next) {
+  static async sendCodigoVerificacao(req, res, next) {
     try {
       const { telefone } = req.body;
       
@@ -27,7 +28,7 @@ export class ClienteController {
     }
   }
  
-  static async validaCodigo(req, res, next) {
+  static async validateCodigo(req, res, next) {
     try {
       const { codigo, tokenTemporario } = req.body;
 
@@ -81,7 +82,7 @@ export class ClienteController {
     }
   }
 
-static async desativarEndereco(req, res, next) {
+  static async disableEndereco(req, res, next) {
     try {
       const { id } = req.params;
       const clienteIdLogado = req.usuarioLogado.id;
@@ -118,5 +119,3 @@ static async desativarEndereco(req, res, next) {
     }
   }
 }
-
-export { ClienteController };

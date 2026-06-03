@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 // Função para salvar os ingredientes de um produto
 export async function salvarIngredientes(tx, produtoId, ingredientes) {
   // Valida se a lista de ingredientes é um array válido

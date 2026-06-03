@@ -10,7 +10,7 @@ datasource db {
 model Cliente {
   id       String   @id @db.VarChar(12)
   nome     String   @db.VarChar(255)
-  telefone String   @db.VarChar(30)
+  telefone String   @unique @db.VarChar(30)
   endereco Endereco[]
   pedido   Pedido[]
 
@@ -175,9 +175,9 @@ enum usuario_cargo {
 
 enum pedido_status {
   pendente
-  preparo
+  preparo   @map("em preparo")
   pronto
-  em_rota   @map("em rota")
+  rota   @map("em rota")
   entregue
   cancelado
 }

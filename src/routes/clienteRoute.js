@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import ClienteController from '../controllers/ClienteController.js';
+import { ClienteController } from '../controllers/ClienteController.js';
+import { authUsuario } from '../middlewares/authMiddleware.js';
 
 const router = Router();
-const clienteController = new ClienteController();
 
-router.post('/enviar-otp', clienteController.enviaCodigoVerificacao);
-router.post('/validar-otp', clienteController.validaCodigo);
-router.patch('/enderecos/:id/desativar', authUsuario, clienteController.desativarEndereco);
+router.post('/enviar-otp', ClienteController.sendCodigoVerificacao);
+router.post('/validar-otp', ClienteController.validateCodigo);
+router.patch('/enderecos/:id/desativar', authUsuario, ClienteController.disableEndereco);
 
 export default router;

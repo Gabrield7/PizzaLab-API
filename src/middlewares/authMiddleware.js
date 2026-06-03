@@ -4,13 +4,13 @@ export function authUsuario(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json({ error: "Token de acesso não fornecido" });
+    return res.status(401).json({ error: "Acesso negado. Token de acesso não fornecido" });
   }
 
   // O header vem no formato: "Bearer TOKEN_STRING"
   const partes = authHeader.split(" ");
   if (partes.length !== 2 || partes[0] !== "Bearer") {
-    return res.status(401).json({ error: "Token mal formatado" });
+    return res.status(401).json({ error: "Acesso negado. Credenciais de autenticação inválidas ou mal formatadas" });
   }
 
   const token = partes[1];

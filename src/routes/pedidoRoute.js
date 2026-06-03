@@ -3,15 +3,14 @@ import { PedidosController } from "../controllers/PedidoController.js";
 import { authUsuario, permitirCargos } from "../middlewares/authMiddleware.js";
 
 const router = Router();
-const pedidosController = new PedidosController();
 
-router.post("/", pedidosController.createPedido);
-router.get('/painel', authUsuario, pedidosController.getPedidosParaPainel);
+router.post("/", authUsuario, PedidosController.createPedido);
+router.get('/painel', authUsuario, PedidosController.getPedidosParaPainel);
 
 router.patch('/:id/status', 
   authUsuario,
   permitirCargos("gestor", "pizzaiolo", "entregador"), 
-  pedidosController.atualizarStatus
+  PedidosController.updateStatus
 );
 
 export default router;

@@ -1,9 +1,10 @@
-import prisma from "../config/database.js";
+import { prisma } from "../config/database.js";
 import { nanoid } from "nanoid";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export class UsuarioController {
-  async login(req, res, next) {
+  static async login(req, res, next) {
     try {
       const { email, senha } = req.body;
 
@@ -14,8 +15,12 @@ export class UsuarioController {
 
       const usuario = await prisma.usuario.findUnique({ where: { email } });
 
-      if (!usuario || !usuario.ativo) {
-        return res.status(401).json({ error: "Credenciais inválidas ou conta inativa" });
+      if (!usuario) return res.status(401).json({ error: "E-mail ou senha incorretos" });
+
+      if (!usuario.ativo) {
+        return res.status(403).json({ 
+          error: "Sua conta está inativa. Por favor, entre em contato com o gerente do PizzaLab." 
+        });
       }
 
       // Valida se a senha digitada bate com a do banco
@@ -45,7 +50,7 @@ export class UsuarioController {
     }
   }
 
-  async getUsuarios(req, res, next) {
+  static async getUsuarios(req, res, next) {
     try {
       const { cargo, ordem, campo } = req.query;
 
@@ -79,7 +84,7 @@ export class UsuarioController {
     }
   }
 
-  async getUsuarioById(req, res, next) {
+  static async getUsuarioById(req, res, next) {
     try {
       const { id } = req.params;
 
@@ -99,8 +104,8 @@ export class UsuarioController {
       next(error); // Passa o erro para o middleware de tratamento de erros
     }
   }
-  
-  async createUsuario(req, res, next) {
+
+  static async createUsuario(req, res, next) {
     try {
       const { nome, email, telefone, cargo } = req.body;
 
@@ -137,7 +142,7 @@ export class UsuarioController {
     }
   }
 
-  async updateUsuario(req, res, next) {
+  static async updateUsuario(req, res, next) {
     try {
       const { id } = req.params;
       const { nome, email, telefone, cargo, ativo } = req.body;
@@ -177,7 +182,7 @@ export class UsuarioController {
     }
   }
 
-  async deleteUsuario(req, res, next) {
+  static async deleteUsuario(req, res, next) {
     try {
       const { id } = req.params;
 
@@ -201,7 +206,7 @@ export class UsuarioController {
     }
   }
 
-  async updateSenha(req, res, next) {
+  static async updateSenha(req, res, next) {
     try {
       const { id } = req.params;
       const { senha_atual, nova_senha } = req.body;

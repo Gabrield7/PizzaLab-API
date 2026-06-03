@@ -3,36 +3,35 @@ import { IngredienteController } from "../controllers/IngredienteController.js";
 import { authUsuario, permitirCargos } from "../middlewares/authMiddleware.js";
 
 const router = Router();
-const ingredienteController = new IngredienteController();
 
 router.get('/', 
   authUsuario,
   permitirCargos("gestor", "pizzaiolo"),
-  ingredienteController.getIngredientes
+  IngredienteController.getIngredientes
 );
 
 router.get('/:id', 
   authUsuario,
   permitirCargos("gestor", "pizzaiolo"),
-  ingredienteController.getIngredientesById
+  IngredienteController.getIngredientesById
 );
 
 router.post('/', 
   authUsuario,
   permitirCargos("gestor"),
-  ingredienteController.createIngrediente
+  IngredienteController.createIngrediente
 );
 
 router.put('/:id', 
   authUsuario,
   permitirCargos("gestor"),
-  ingredienteController.updateIngrediente
+  IngredienteController.updateIngrediente
 );
 
 router.delete('/:id', 
   authUsuario,
   permitirCargos("gestor"),
-  ingredienteController.deleteIngrediente
+  IngredienteController.deleteIngrediente
 );
 
 export default router;

@@ -1,7 +1,9 @@
-export function gerenciadorErros(error, req, res, next) {
+export function authErros(error, req, res, next) {
+  const status = error.status || error.statusCode;
+
   // Tratamento de erros customizados com status HTTP
-  if (error.status) {
-    return res.status(error.status).json({ error: error.message });
+  if (status) {
+    return res.status(status).json({ error: error.message });
   }
 
   // Tratamento geral de erros de validação do Prisma (Ex: violação de chave estrangeira, dados inconsistentes etc.)

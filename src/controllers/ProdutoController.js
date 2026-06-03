@@ -1,8 +1,8 @@
-import prisma from "../config/database.js";
+import { prisma } from "../config/database.js";
 import { nanoid } from "nanoid";
 import { salvarIngredientes } from "../utils/ReceitaUtils.js";
 
-class ProdutoController {
+export class ProdutoController {
   static async getProdutos(req, res, next) {
     try {
       const { categoria, ordem, campo } = req.query;
@@ -188,4 +188,3 @@ class ProdutoController {
   }
 }
   
-export { ProdutoController };
