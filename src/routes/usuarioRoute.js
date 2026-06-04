@@ -1,6 +1,11 @@
 import { Router } from "express";
 import { UsuarioController } from "../controllers/UsuarioController.js";
-import { authUsuario, permitirCargos, verificarPosse } from "../middlewares/authMiddleware.js";
+import { 
+  authUsuario, 
+  permitirCargos, 
+  gestorOuProprioUsuario,
+  apenasProprioUsuario
+} from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
@@ -12,9 +17,9 @@ router.get("/",
   UsuarioController.getUsuarios
 );
 
-router.get("/:id", 
-  authUsuario, 
-  permitirCargos("gestor"), 
+router.get("/:id",
+  authUsuario,
+  gestorOuProprioUsuario,
   UsuarioController.getUsuarioById
 );
 
@@ -24,17 +29,22 @@ router.post("/",
   UsuarioController.createUsuario
 );
 
-router.put("/:id", 
-  authUsuario, 
-  permitirCargos("gestor", "pizzaiolo", "entregador"), 
-  verificarPosse,
+router.put("/:id",
+  authUsuario,
+  gestorOuProprioUsuario,
   UsuarioController.updateUsuario
 );
 
-router.put("/:id/alterar-senha", 
-  authUsuario, 
-  permitirCargos("gestor", "pizzaiolo", "entregador"), 
-  verificarPosse,
+// router.put("/:id", 
+//   authUsuario, 
+//   permitirCargos("gestor", "pizzaiolo", "entregador"), 
+//   verificarPosse,
+//   UsuarioController.updateUsuario
+// );
+
+router.put("/:id/alterar-senha",
+  authUsuario,
+  apenasProprioUsuario,
   UsuarioController.updateSenha
 );
 

@@ -155,6 +155,12 @@ export class UsuarioController {
         return res.status(404).json({ message: `Usuário com ID ${id} não encontrado` });
       }
 
+      if (logadoCargo !== "gestor" && (cargo !== undefined || ativo !== undefined)) {
+        return res.status(403).json({
+          error: "Acesso negado. Apenas o gestor pode alterar cargo ou status de ativação"
+        });
+      }
+
       // Atualizar o produto no banco de dados
       const dadosParaAtualizar = {};
 
@@ -165,6 +171,12 @@ export class UsuarioController {
       if (logadoCargo === "gestor") {
         if (cargo !== undefined) dadosParaAtualizar.cargo = cargo;
         if (ativo !== undefined) dadosParaAtualizar.ativo = ativo;
+      }
+
+      if (Object.keys(dadosParaAtualizar).length === 0) {
+        return res.status(400).json({
+          error: "Nenhum dado válido foi informado para atualização"
+        });
       }
 
       // Salva os dados atualizados do usuário no banco de dados

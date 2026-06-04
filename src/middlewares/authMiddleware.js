@@ -51,24 +51,52 @@ export function permitirCargos(...cargosPermitidos) {
     return next(); // Continua para o próximo middleware ou rota
   };
 }
-
-export function verificarPosse(req, res, next) {
-  const idUrl = req.params.id; // O ID que está na rota
-  const { id: logadoId, cargo: logadoCargo } = req.usuarioLogado; // Quem está logado
-
-  // Gestor tem acesso irrestrito a todos os recursos
-  if (logadoCargo === "gestor") return next();
+// Permite acesso se o usuário for gestor ou se for o próprio dono do recurso (comparando o ID do token com o ID da URL)
+export function gestorOuProprioUsuario(req, res, next) {
+  const { id: logadoId, cargo } = req.usuarioLogado;
 
   if (!req.params.id) {
-    console.error("'verificarPosse' aplicado em rota sem parâmetro :id");
     return res.status(500).json({ error: "Erro interno: configuração inválida de rota" });
   }
-  // Usuário comum só pode acessar ou modificar seus próprios dados
-  // O ID da URL deve bater com o ID do token
-  if (logadoId === req.params.id) return next();
 
-  // Se não for o gestor e o ID não bater, o acesso é sumariamente bloqueado
-  return res.status(403).json({ 
-    error: "Acesso negado. Você não possui permissão para acessar ou modificar este recurso" 
+  if (cargo === "gestor" || logadoId === req.params.id) {
+    return next();
+  }
+
+  return res.status(403).json({
+    error: "Acesso negado. Você não possui permissão para acessar ou modificar este recurso"
   });
 }
+
+// Bloqueia qualquer acesso em que o usuário logado não seja o dono do recurso
+export function apenasProprioUsuario(req, res, next) {
+  if (!req.params.id) {
+    return res.status(500).json({ error: "Erro interno: configuração inválida de rota" });
+  }
+
+  const { id: logadoId } = req.usuarioLogado;
+
+  if (logadoId === req.params.id) return next();
+
+  return res.status(403).json({
+    error: "Acesso negado. Cada usuário pode alterar apenas sua própria senha"
+  });
+}
+
+// export function verificarPosse(req, res, next) {
+//   const idUrl = req.params.id; // O ID que está na rota
+//   const { id: logadoId, cargo: logadoCargo } = req.usuarioLogado; // Quem está logado
+
+//   if (!req.params.id) {
+//     console.error("'verificarPosse' aplicado em rota sem parâmetro :id");
+//     return res.status(500).json({ error: "Erro interno: configuração inválida de rota" });
+//   }
+//   // Usuário comum só pode acessar ou modificar seus próprios dados
+//   // O ID da URL deve bater com o ID do token
+//   if (logadoId === req.params.id) return next();
+
+//   // Se não for o gestor e o ID não bater, o acesso é sumariamente bloqueado
+//   return res.status(403).json({ 
+//     error: "Acesso negado. Você não possui permissão para acessar ou modificar este recurso" 
+//   });
+// }
