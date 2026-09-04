@@ -4,7 +4,7 @@ import { authUsuario, permitirCargos } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.post("/", authUsuario, PedidosController.createPedido);
+router.post("/", PedidosController.createPedido);
 router.get('/painel', authUsuario, PedidosController.getPedidosParaPainel);
 
 router.patch('/:id/status', 

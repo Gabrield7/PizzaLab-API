@@ -90,29 +90,35 @@ export function calculaTotal(itens, taxa = 5, pedidoId) {
 }
 
 // Função para calcular a taxa de entrega com base no bairro do cliente
+//
+// PROVISÓRIO: frete grátis pra todo mundo, independente do endereço.
+// A tabela por bairro fica comentada pra religar depois, quando isso
+// voltar a fazer parte do escopo.
 export function calculaTaxaEntrega(bairro) {
-  const taxaBase = 5.00; // Taxa base para bairros não listados
-  if (!bairro) return taxaBase;
- 
-  const bairroFormatado = bairro
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toLowerCase();
- 
-  const tabela = {
-    "santo antonio":          0.00,
-    "nova betania":           3.00,
-    "centro":                 4.00,
-    "lto do vale":            6.00,
-    "maria auxiliadora":      5.50,
-    "padre jose cruza":       6.50,
-    "boa vista":              7.00,
-    "presidente costa silva": 8.00,
-    "zona rural":            15.00
-  };
- 
-  return tabela[bairroFormatado] ?? taxaBase;
+  return 0;
+
+  // const taxaBase = 5.00; // Taxa base para bairros não listados
+  // if (!bairro) return taxaBase;
+  //
+  // const bairroFormatado = bairro
+  //   .normalize("NFD")
+  //   .replace(/[\u0300-\u036f]/g, "")
+  //   .trim()
+  //   .toLowerCase();
+  //
+  // const tabela = {
+  //   "santo antonio":          0.00,
+  //   "nova betania":           3.00,
+  //   "centro":                 4.00,
+  //   "lto do vale":            6.00,
+  //   "maria auxiliadora":      5.50,
+  //   "padre jose cruza":       6.50,
+  //   "boa vista":              7.00,
+  //   "presidente costa silva": 8.00,
+  //   "zona rural":            15.00
+  // };
+  //
+  // return tabela[bairroFormatado] ?? taxaBase;
 }
 
 // Fluxo de status do pedido
