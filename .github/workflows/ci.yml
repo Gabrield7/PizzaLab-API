@@ -1,0 +1,30 @@
+name: CI
+
+# Quando o workflow roda
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: # permite rodar manualmente pela aba Actions
+
+jobs:
+  test:
+    name: Testes
+    runs-on: ubuntu-latest # máquina virtual Linux fornecida pelo GitHub
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v6
+
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm # guarda o cache do npm entre execuções
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar os testes
+        run: npm test
