@@ -15,16 +15,26 @@ jobs:
 
     steps:
       - name: Baixar o código
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Configurar o Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm # guarda o cache do npm entre execuções
+          cache: 'npm' # guarda o cache do npm entre execuções
 
       - name: Instalar dependências
-        run: npm ci
+        run: npm ci # Certifique-se de que o package-lock.json está comitado no Git!
 
       - name: Rodar os testes
         run: npm test
+
+  deploy:
+    name: Deploy no Render
+    needs: test # só roda se os testes passarem
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Disparar deploy no Render
+        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
